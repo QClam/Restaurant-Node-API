@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<%- include('./partials/header.ejs') %>
+
+
+    <body>
+
+        <div class="container mt-4">
+            <h1>Danh sách sản phẩm</h1>
+            <div class="mb-3">
+                <a href="/add-product" class="btn btn-primary">Thêm sản phẩm</a>
+            </div>
+
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá ($)</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% products.forEach((product, index)=> { %>
+                        <tr>
+                            <td>
+                                <%= index + 1 %>
+                            </td>
+                            <td>
+                                <%= product.name %>
+                            </td>
+                            <td>
+                                <%= product.price %>
+                            </td>
+                            <td>
+                                <a href="/product/update/<%= product.id %>" class="btn btn-warning btn-sm">Sửa</a>
+                                <form action="/product/delete/<%= product._id %>?_method=DELETE" method="POST"
+                                    style="display: inline;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Bạn có muốn xóa sản phẩm này?')">Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                        <% }) %>
+                </tbody>
+            </table>
+
+        </div>
+
+    </body>
+    <%- include('./partials/footer.ejs') %>
+
+</html>
