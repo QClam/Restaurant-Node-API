@@ -28,6 +28,11 @@ app.get('/', (req, res) => {
     res.send('Hello World')
 })
 
+app.use((req, res, next) => {
+    console.log(`Request URL: ${req.url}, ID: ${req.params.id}`);
+    next();
+});
+
 //routes
 app.use('/api/products', productRoutes)
 app.use('/api/users', userRoutes)
