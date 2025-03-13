@@ -1,4 +1,5 @@
 const Product = require('../models/product.model.js')
+const mongoose = require('mongoose');
 
 const getProducts = async (req, res) => {
     try {
@@ -54,25 +55,32 @@ const updateProduct = async (req, res) => {
 const purchaseProduct = async (req, res) => {
     try {
         const { id, purchaseQuantity } = req.body;
-        const product = await Product.findById(id)
 
+        // Kiểm tra ID có hợp lệ không
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ message: "Invalid product ID" });
+        }
+
+        const product = await Product.findById(id);
         if (!product) {
-            return res.status(404).json({ message: 'Product not found' })
+            return res.status(404).json({ message: 'Product not found' });
         }
 
-        // Check if the product is in stock
+        // Kiểm tra hàng tồn kho
         if (product.quantity < purchaseQuantity) {
-            return res.status(400).json({ message: 'Product out of stock' })
+            return res.status(400).json({ message: 'Product out of stock' });
         }
 
-        //Update the product quantity
+        // Cập nhật số lượng sản phẩm
         product.quantity -= purchaseQuantity;
         await product.save();
-        res.status(201).json({ product })
+
+        res.status(201).json({ product });
     } catch (error) {
-        res.status(500).json({ message: error.message })
+        console.error("Purchase Error:", error.message);
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 const deleteProduct = async (req, res) => {
     try {
