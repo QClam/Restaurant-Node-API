@@ -55,6 +55,7 @@ const updateProduct = async (req, res) => {
 const purchaseProduct = async (req, res) => {
     try {
         const { id, purchaseQuantity } = req.body;
+        console.log("Received Body:", req.body);
 
         // Kiểm tra ID có hợp lệ không
         if (!mongoose.Types.ObjectId.isValid(id)) {
